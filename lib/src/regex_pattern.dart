@@ -113,7 +113,7 @@ class RPattern {
   }
 
   /**
-   * End of a line of string. "[a-z]" -> "^[a-z]"
+   * End of a line of string. "[a-z]" -> "[a-z]$"
    */
   endOfLine() {
     _endOfLine = true;
