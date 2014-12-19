@@ -1,8 +1,8 @@
 name: objective_regex
 description: >
    A library for generating regex pattern strings in an object-oriented style.
-version: 0.1.0
-author: laco <laco0416@gmail.com>
+version: 0.1.0+1
+author: laco0416 <laco0416@gmail.com>
 homepage: https://github.com/laco0416/objective_regex
 dev_dependencies:
   guinness: any
