@@ -4,7 +4,7 @@
 part of objective_regex;
 
 /**
- * Regex pattern object.
+ * Regex pattern object
  */
 class RPattern {
 
@@ -47,7 +47,7 @@ class RPattern {
   }
 
   /**
-   * Add pattern.
+   * Add pattern
    */
   addPattern(pattern) {
     if (pattern == null) {
@@ -73,7 +73,7 @@ class RPattern {
   String _repeatingSuffix = "";
 
   /**
-   * Convert the expression to class. "[a-z]" -> [a-z] [a-z]{1, 2}
+   * Convert the expression to class. "[a-z]" -> "[a-z]{1, 2}"
    */
   repeat({int count : 0, int minCount : 0, int maxCount : 0}) {
     if (count > 0) {
@@ -90,14 +90,14 @@ class RPattern {
   }
 
   /**
-   * Repeat least once. [a-z] -> [a-z]+
+   * Repeat least once. "[a-z]" -> "[a-z]+"
    */
   repeatLeastOnce() {
     _repeatingSuffix += "+";
   }
 
   /**
-   * Maybe exists. [a-z] -> [a-z]?
+   * Maybe exists. "[a-z]" -> "[a-z]?"
    */
   maybe() {
     _repeatingSuffix += "?";
