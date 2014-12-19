@@ -1,4 +1,4 @@
-# objective_regex
+# objective_regex [![Build Status](https://drone.io/github.com/laco0416/objective_regex/status.png)](https://drone.io/github.com/laco0416/objective_regex/latest)
 
 A dart library for generating regex pattern strings in an object-oriented style.
 
