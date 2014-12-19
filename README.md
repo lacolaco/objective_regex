@@ -6,6 +6,7 @@ A dart library for generating regex pattern strings in an object-oriented style.
 
 A simple usage example:
 
+```dart
     import 'package:objective_regex/objective_regex.dart';
 
     main() {
@@ -28,4 +29,4 @@ A simple usage example:
       print("Built regex: $regex");
       print(new RegExp(regex).hasMatch("12-3456-7890"));
     }
-
+```
