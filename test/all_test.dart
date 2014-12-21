@@ -119,6 +119,23 @@ main() {
           ..endOfLine() ;
         expect(builder.build()).toEqual(r"A$");
       });
+      it("match to start of word", () {
+        builder
+          ..addPattern("A")
+          ..startOfWord() ;
+        expect(builder.build()).toEqual(r"\bA");
+      });
+    });
+
+    describe("regexp test", () {
+      it("return 2 matches", () {
+        builder
+          ..addPattern("hoge")
+          ..startOfWord()
+          ..endOfWord();
+        var matches = new RegExp(builder.build()).allMatches("hoge hogehoge hoge");
+        expect(matches.length).toBe(2);
+      });
     });
   });
 }

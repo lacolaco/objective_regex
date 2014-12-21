@@ -24,6 +24,9 @@ class RPattern {
     return new RGroup(patterns);
   }
 
+  /**
+   * Build [RPattern] to [String]
+   */
   build() {
     var pattern = _children.fold("", (v, element) {
       if (element is RPattern) {
@@ -34,15 +37,20 @@ class RPattern {
       }
     });
     var prefix = "";
+    if (_startOfWord) {
+      prefix += r"\b";
+    }
     if (_startOfLine) {
-      prefix += "^";
+      prefix += r"^";
     }
-    pattern = "$prefix$pattern";
     var postFix = _repeatingSuffix;
-    if (_endOfLine) {
-      postFix += "\$";
+    if (_endOfWord) {
+      postFix += r"\b";
     }
-    pattern = "$pattern$postFix";
+    if (_endOfLine) {
+      postFix += r"$";
+    }
+    pattern = "$prefix$pattern$postFix";
     return pattern;
   }
 
@@ -73,7 +81,11 @@ class RPattern {
   String _repeatingSuffix = "";
 
   /**
-   * Convert the expression to class. "[a-z]" -> "[a-z]{1, 2}"
+   * Repeat this.
+   *
+   * If [count] is set, "[a-z]" become "[a-z]{count}".
+   * If [minCount] or [maxCount] are set, "[a-z]" become "[a-z]{[minCount], [maxCount]}".
+   * If no arguments, "[a-z]" become "[a-z]*".
    */
   repeat({int count : 0, int minCount : 0, int maxCount : 0}) {
     if (count > 0) {
@@ -103,7 +115,7 @@ class RPattern {
     _repeatingSuffix += "?";
   }
 
-  bool _startOfLine = false, _endOfLine = false;
+  bool _startOfLine = false, _endOfLine = false, _startOfWord = false, _endOfWord = false;
 
   /**
    * Start of a line of string. "[a-z]" -> "^[a-z]"
@@ -117,6 +129,20 @@ class RPattern {
    */
   endOfLine() {
     _endOfLine = true;
+  }
+
+  /**
+   * Start of a word of string. "[a-z]" -> "\b[a-z]"
+   */
+  startOfWord() {
+    _startOfWord = true;
+  }
+
+  /**
+   * End of a word of string. "[a-z]" -> "[a-z]\b"
+   */
+  endOfWord() {
+    _endOfWord = true;
   }
 }
 
