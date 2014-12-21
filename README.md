@@ -1,4 +1,6 @@
-# objective_regex [![Build Status](https://drone.io/github.com/laco0416/objective_regex/status.png)](https://drone.io/github.com/laco0416/objective_regex/latest)
+# objective_regex
+
+[![Build Status][status]][status badge] [![Pub][pub badge]][pub]
 
 A dart library for generating regex pattern strings in an object-oriented style.
 
@@ -30,3 +32,8 @@ A simple usage example:
       print(new RegExp(regex).hasMatch("12-3456-7890"));
     }
 ```
+
+[status]: https://drone.io/github.com/laco0416/objective_regex/status.png
+[status badge]: https://drone.io/github.com/laco0416/objective_regex/latest
+[pub]: https://pub.dartlang.org/packages/objective_regex
+[pub badge]: http://img.shields.io/pub/v/objective_regex.svg
