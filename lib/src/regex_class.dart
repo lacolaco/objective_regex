@@ -5,19 +5,51 @@ part of objective_regex;
  */
 class RClass extends RPattern {
 
-  static get NUMBER => new RClass("0-9");
+  /**
+   * Number word class ([0-9])
+   */
+  static RClass get NUMBER => new RClass("0-9");
 
-  static get ALPHABET_LOWER => new RClass("a-z");
+  /**
+   * Lower alphabet word class ([a-z])
+   */
+  static RClass get ALPHABET_LOWER => new RClass("a-z");
 
-  static get ALPHABET_UPPER => new RClass("A-Z");
+  /**
+   * Upper alphabet word class ([A-Z])
+   */
+  static RClass get ALPHABET_UPPER => new RClass("A-Z");
 
-  static get ALPHABET => new RClass("a-zA-Z");
+  /**
+   * Alphabet word class ([a-zA-Z])
+   */
+  static RClass get ALPHABET => new RClass("a-zA-Z");
 
-  RClass(String pattern): super(pattern);
+  RClass([String pattern]): super(pattern);
+
+  bool _negative = false;
+
+  /**
+   * Negate class expression. "[a-z]" -> "[^a-z]"
+   */
+  negate() {
+    _negative = true;
+  }
+
+  @override
+  addPattern(String pattern) {
+    super.addPattern(pattern);
+  }
+
+  @override
+  addPatterns(List<String> patterns) {
+    super.addPatterns(patterns);
+  }
 
   /**
    * Build regex as word class
    */
+  @override
   build() {
     var pattern = _children.fold("", (v, element) {
       if (element is RPattern) {
@@ -27,17 +59,19 @@ class RClass extends RPattern {
         return v + element.toString();
       }
     });
+    if (_negative) {
+      pattern = "^$pattern";
+    }
     pattern = "[$pattern]";
     var prefix = "";
     if (_startOfLine) {
       prefix += "^";
     }
-    pattern = "$prefix$pattern";
     var postFix = _repeatingSuffix;
     if (_endOfLine) {
       postFix += "\$";
     }
-    pattern = "$pattern$postFix";
+    pattern = "$prefix$pattern$postFix";
     return pattern;
   }
 

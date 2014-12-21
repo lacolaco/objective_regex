@@ -38,6 +38,13 @@ main() {
         builder.addPattern(alphabet);
         expect(builder.build()).toEqual(r"[a-z]");
       });
+
+      it("negate class", () {
+        var nonNumber = new RClass("0-9")
+          ..negate();
+        builder.addPattern(nonNumber);
+        expect(builder.build()).toEqual(r"[^0-9]");
+      });
     });
 
     describe('repeating', () {
@@ -92,7 +99,8 @@ main() {
 
       it('group repeating', () {
         var A = new RGroup(["A", "B"])
-          ..repeat(count:3);
+          ..repeat(count:3)
+          ..splitAsOr();
         builder.addPattern(A);
         expect(builder.build()).toEqual(r"(A|B){3}");
       });
@@ -101,7 +109,8 @@ main() {
     describe("grouping", () {
       it('group patterns', () {
         builder
-          ..addPattern(new RGroup(["A", "B"]));
+          ..addPattern(new RGroup(["A", "B"])
+                         ..splitAsOr());
         expect(builder.build()).toEqual("(A|B)");
       });
     });
@@ -124,6 +133,61 @@ main() {
           ..addPattern("A")
           ..startOfWord() ;
         expect(builder.build()).toEqual(r"\bA");
+      });
+    });
+
+    describe("constants test", () {
+      describe("classes", () {
+        it("number", () {
+          builder.addPattern(RClass.NUMBER);
+          for (var i = 0; i < 10; i++) {
+            expect(new RegExp(builder.build()).hasMatch("$i")).toBeTrue();
+          }
+          expect(new RegExp(builder.build()).hasMatch("A")).toBeFalse();
+        });
+        it("alphabet lower", () {
+          builder.addPattern(RClass.ALPHABET_LOWER);
+          expect(new RegExp(builder.build()).hasMatch("a")).toBeTrue();
+          expect(new RegExp(builder.build()).hasMatch("A")).toBeFalse();
+        });
+        it("alphabet upper", () {
+          builder.addPattern(RClass.ALPHABET_UPPER);
+          expect(new RegExp(builder.build()).hasMatch("A")).toBeTrue();
+          expect(new RegExp(builder.build()).hasMatch("a")).toBeFalse();
+        });
+      });
+      describe("meta characters", () {
+        it("boundary", () {
+          builder.addPatterns([RPattern.BOUNDARY, "hoge", RPattern.BOUNDARY]);
+          expect(new RegExp(builder.build()).hasMatch("hoge")).toBeTrue();
+          expect(new RegExp(builder.build()).hasMatch("hogehoge")).toBeFalse();
+        });
+        it("new line", () {
+          builder.addPatterns(["hoge", RPattern.NEW_LINE]);
+          expect(new RegExp(builder.build()).hasMatch("""hoge
+          """)).toBeTrue();
+          expect(new RegExp(builder.build()).hasMatch("hoge")).toBeFalse();
+        });
+        it("tab character", () {
+          builder.addPatterns(["hoge", RPattern.TAB_CHARACTER]);
+          expect(new RegExp(builder.build()).hasMatch("hoge\t")).toBeTrue();
+          expect(new RegExp(builder.build()).hasMatch("hoge")).toBeFalse();
+        });
+        it("all word", () {
+          builder.addPatterns([RPattern.ALL_WORD]);
+          expect(new RegExp(builder.build()).hasMatch("A")).toBeTrue();
+          expect(new RegExp(builder.build()).hasMatch(".")).toBeFalse();
+        });
+        it("all non-word", () {
+          builder.addPatterns([RPattern.ALL_NON_WORD]);
+          expect(new RegExp(builder.build()).hasMatch(".")).toBeTrue();
+          expect(new RegExp(builder.build()).hasMatch("A")).toBeFalse();
+        });
+        it("space", () {
+          builder.addPatterns([RPattern.SPACE, "A"]);
+          expect(new RegExp(builder.build()).hasMatch(" A")).toBeTrue();
+          expect(new RegExp(builder.build()).hasMatch("A")).toBeFalse();
+        });
       });
     });
 

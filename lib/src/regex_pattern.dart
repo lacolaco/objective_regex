@@ -8,6 +8,36 @@ part of objective_regex;
  */
 class RPattern {
 
+  /**
+   * Word boundary meta character (\b)
+   */
+  static RPattern get BOUNDARY => new RPattern(r"\b");
+
+  /**
+   * New line meta character (\n)
+   */
+  static RPattern get NEW_LINE => new RPattern(r"\n");
+
+  /**
+   * Tab stop meta character (\t)
+   */
+  static RPattern get TAB_CHARACTER => new RPattern(r"\t");
+
+  /**
+   * All word meta character (\w)
+   */
+  static RPattern get ALL_WORD => new RPattern(r"\w");
+
+  /**
+   * All non-word meta character (\W)
+   */
+  static RPattern get ALL_NON_WORD => new RPattern(r"\W");
+
+  /**
+   * Space meta character (\s)
+   */
+  static RPattern get SPACE => new RPattern(r"\s");
+
   List _children = [];
 
   RPattern([String pattern]) {

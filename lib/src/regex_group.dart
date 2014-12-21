@@ -6,20 +6,42 @@ part of objective_regex;
 class RGroup extends RPattern {
 
   RGroup([List patterns]): super() {
-    addPatterns(patterns);
+    if (patterns != null) {
+      addPatterns(patterns);
+    }
+  }
+
+  bool _splitAsOr = false;
+
+  splitAsOr() {
+    _splitAsOr = true;
   }
 
   /**
    * Build regex as group class
    */
+  @override
   build() {
-    var pattern = "(${_children.map((p) {
-      if (p is RPattern) {
-        return (p as RPattern).build();
-      } else {
-        return p;
-      }
-    }).join("|")})";
+    String pattern;
+    if (_splitAsOr) {
+      pattern = "(${_children.map((p) {
+        if (p is RPattern) {
+          return (p as RPattern).build();
+        } else {
+          return p;
+        }
+      }).join("|")})";
+    } else {
+      pattern = _children.fold("", (v, element) {
+        if (element is RPattern) {
+          return v + element.build();
+        }
+        else {
+          return v + element.toString();
+        }
+      });
+      pattern = "($pattern)";
+    }
     var prefix = "";
     if (_startOfLine) {
       prefix += "^";
